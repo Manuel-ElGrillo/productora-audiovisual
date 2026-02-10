@@ -3,7 +3,7 @@
 
 class BookingRequestModel{
     constructor({
-      clientModel, 
+      clientName, 
       clientEmail,
       clientPhone,
       serviceName,
@@ -13,7 +13,7 @@ class BookingRequestModel{
       bookingTime  
     }){
         // Datos del cliente
-        this.clientModel = clientModel;
+        this.clientName = clientName;
         this.clientEmail = clientEmail;
         this.clientPhone = clientPhone;
         // Datos del servicio
