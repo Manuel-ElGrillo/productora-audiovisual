@@ -1,5 +1,5 @@
-import BookingGateway from '../../../boundaries/gateways/BookingGateway.js';
-import BookingModel from '../schemas/BookingSchema.js';
+import BookingGateway from '../../../02-boundaries/02-3-gateways/BookingGateway.js';
+import BookingModel from "../schemas/BookinfSchema.js";
 
 class MongoBookingRepository extends BookingGateway {
   /**

@@ -1,4 +1,4 @@
-import BookingRequestModel from "../../02-boundaries/02-1-models/BookingRequestModel";
+import BookingRequestModel from "../../02-boundaries/02-1-models/BookingRequestModel.js";
 
 class BookingController{
     /**
