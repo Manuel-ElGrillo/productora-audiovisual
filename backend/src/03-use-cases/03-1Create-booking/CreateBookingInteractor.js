@@ -65,7 +65,7 @@ class CreateBookingInteractor extends CreateBookingInputBoundary{
             this.outputBoundary.success(responseModel);
 
         } catch(error) {
-            const responseModel = BookingResponseModel.createFailure(savedBooking);
+            const responseModel = BookingResponseModel.createFailure(error.message);
             this.outputBoundary.failure(responseModel);
         }
     } 
