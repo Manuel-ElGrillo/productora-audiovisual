@@ -35,7 +35,7 @@ class CreateBookingInteractor extends CreateBookingInputBoundary{
 
             const service = new Service(
                 requestModel.serviceName,
-                requestModel.serviceName,
+                requestModel.serviceDescription,
                 requestModel.servicePrice
             )
 
@@ -53,10 +53,10 @@ class CreateBookingInteractor extends CreateBookingInputBoundary{
             }
 
             const booking = new Booking(
-                requestModel.bookingDate,
-                requestModel.bookingTime,
                 client,
-                service
+                service,
+                requestModel.bookingDate,
+                requestModel.bookingTime
             )
 
             const savedBooking = await this.bookingGateway.save(booking);
