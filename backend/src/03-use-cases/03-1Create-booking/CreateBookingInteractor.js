@@ -13,9 +13,10 @@ class CreateBookingInteractor extends CreateBookingInputBoundary{
    * @param {CreateBookingInputBoundary} outputBoundary - Para notificar al Presenter
    *
    */
-    constructor(bookingGateway, outputBoundary){
+    constructor(bookingGateway, serviceGateway, outputBoundary){
         super();
         this.bookingGateway = bookingGateway;
+        this.serviceGateway = serviceGateway
         this.outputBoundary = outputBoundary;
     }
 
@@ -33,10 +34,12 @@ class CreateBookingInteractor extends CreateBookingInputBoundary{
                 requestModel.clientPhone
             )
 
+            const serviceData = await this.serviceGateway.findById(requestModel.serviceId);
+
             const service = new Service(
-                requestModel.serviceName,
-                requestModel.serviceDescription,
-                requestModel.servicePrice
+                serviceData.name,
+                serviceData.description,
+                serviceData.price
             )
 
             const isAviable = await this.checkAvailability(

@@ -6,9 +6,7 @@ class BookingRequestModel{
       clientName, 
       clientEmail,
       clientPhone,
-      serviceName,
-      serviceDescription,
-      servicePrice,
+      serviceId,
       bookingDate,
       bookingTime  
     }){
@@ -17,9 +15,7 @@ class BookingRequestModel{
         this.clientEmail = clientEmail;
         this.clientPhone = clientPhone;
         // Datos del servicio
-        this.serviceName = serviceName;
-        this.serviceDescription = serviceDescription;
-        this.servicePrice = servicePrice;
+        this.serviceId = serviceId;
         // Datos de la reserva
         this.bookingDate = bookingDate;
         this.bookingTime = bookingTime;

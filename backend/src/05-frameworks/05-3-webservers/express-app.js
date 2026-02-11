@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bookingRoutes from './routes/bookingRoutes.js';
+import serviceRoutes from "./routes/serviceRoutes.js";
 
 const createApp = () => {
   const app = express();
@@ -15,6 +16,7 @@ const createApp = () => {
   }));
 
   app.use('/api/bookings', bookingRoutes);
+  app.use("/api/services", serviceRoutes);
 
   // Ruta de health check (para saber si el servidor está vivo)
   app.get('/api/health', (req, res) => {

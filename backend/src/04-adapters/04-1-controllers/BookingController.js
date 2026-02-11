@@ -16,10 +16,10 @@ class BookingController{
     }
 
     async createBooking(req, res){
-        const { clientName, clientEmail, clientPhone, serviceName, serviceDescription, servicePrice, bookingDate, bookingTime } = req.body;
+        const { clientName, clientEmail, clientPhone, serviceId, bookingDate, bookingTime } = req.body;
 
         const requestModel = new BookingRequestModel({
-            clientName, clientEmail, clientPhone, serviceName, serviceDescription, servicePrice, bookingDate, bookingTime
+            clientName, clientEmail, clientPhone, serviceId, bookingDate, bookingTime
         })
 
         this.createBookingInteractor.outputBoundary.setResponse(res);
