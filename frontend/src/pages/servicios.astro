@@ -1,0 +1,517 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Obtener servicios desde el backend
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+
+let services = [];
+let error = null;
+
+try {
+  const response = await fetch(`${API_URL}/services`);
+  const data = await response.json();
+  
+  if (data.status === 'success') {
+    services = data.data;
+  } else {
+    error = 'No se pudieron cargar los servicios';
+  }
+} catch (err) {
+  error = 'Error conectando con el servidor';
+  console.error('Error fetching services:', err);
+}
+---
+
+<Layout title="Servicios - Productora Audiovisual">
+  <!-- Header de la página -->
+  <section class="page-header">
+    <div class="container">
+      <div class="header-panel panel-scarlett">
+        <div class="knobs-row">
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+        </div>
+        <h1>NUESTROS SERVICIOS</h1>
+        <p class="header-subtitle">Soluciones profesionales de audio y video para tu marca</p>
+        <div class="led-group">
+          <div class="led"></div>
+          <span>TODOS LOS SERVICIOS DISPONIBLES</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios Grid -->
+  <section class="section services-section">
+    <div class="container">
+      {error ? (
+        <!-- Mensaje de error -->
+        <div class="error-panel panel">
+          <h3>⚠️ ERROR</h3>
+          <p>{error}</p>
+          <p class="error-hint">Asegúrate de que el backend esté corriendo en http://localhost:3000</p>
+        </div>
+      ) : services.length === 0 ? (
+        <!-- Sin servicios -->
+        <div class="empty-panel panel">
+          <div class="knob-large">
+            <span class="knob-value">?</span>
+          </div>
+          <h3>NO HAY SERVICIOS DISPONIBLES</h3>
+          <p>Aún no se han agregado servicios a la base de datos</p>
+        </div>
+      ) : (
+        <!-- Grid de servicios -->
+        <div class="services-grid">
+          {services.map((service) => (
+            <div class="service-card panel-scarlett" data-service-id={service._id}>
+              <!-- Knob decorativo con precio -->
+              <div class="service-header">
+                <div class="price-knob">
+                  <div class="knob-ring"></div>
+                  <div class="price-display">
+                    <span class="currency">$</span>
+                    <span class="amount">{service.price}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Info del servicio -->
+              <div class="service-body">
+                <h3>{service.name}</h3>
+                <p class="service-description">{service.description}</p>
+
+                <!-- VU Meter decorativo -->
+                <div class="quality-meter">
+                  <span class="meter-label">QUALITY</span>
+                  <div class="vu-meter">
+                    <div class="vu-bar active"></div>
+                    <div class="vu-bar active"></div>
+                    <div class="vu-bar active"></div>
+                    <div class="vu-bar active"></div>
+                    <div class="vu-bar active"></div>
+                  </div>
+                </div>
+
+                <!-- Status badge -->
+                <div class="service-status">
+                  <div class="led"></div>
+                  <span>DISPONIBLE</span>
+                </div>
+              </div>
+
+              <!-- Footer con botón -->
+              <div class="service-footer">
+                <a href={`/contacto?serviceId=${service._id}&serviceName=${encodeURIComponent(service.name)}`} class="btn btn-primary btn-block">
+                  RESERVAR AHORA
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA de contacto alternativo -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-panel panel">
+        <div class="cta-content">
+          <div class="knob-large">
+            <span class="knob-value">?</span>
+          </div>
+          <h2>¿NO ENCUENTRAS LO QUE BUSCAS?</h2>
+          <p>Contáctanos para servicios personalizados y cotizaciones especiales</p>
+          <div class="cta-buttons">
+            <a href="/contacto" class="btn btn-primary">CONTACTAR</a>
+            <a href="mailto:info@productora.com" class="btn btn-secondary">EMAIL</a>
+            <a href="https://wa.me/59899999999" class="btn btn-secondary" target="_blank">WHATSAPP</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ============================================
+     PAGE HEADER
+  ============================================ */
+  .page-header {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .header-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .knobs-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .knob-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    position: relative;
+  }
+
+  .knob-small::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, #3C3C3C, #1A1A1A);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .knob-small::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 30%;
+    background: var(--color-scarlett-red);
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    box-shadow: 0 0 4px var(--color-scarlett-red);
+  }
+
+  .header-panel h1 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .header-subtitle {
+    font-size: var(--font-size-large);
+    color: var(--color-metal-silver);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .led-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .led-group span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     SERVICES SECTION
+  ============================================ */
+  .services-section {
+    background: var(--color-metal-dark);
+    min-height: 60vh;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #3C3C3C 0%, #2E2E2E 100%);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+      var(--shadow-deep),
+      0 0 40px rgba(196, 30, 58, 0.3);
+  }
+
+  /* Service Header con Precio */
+  .service-header {
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(180deg, #2E2E2E 0%, #3C3C3C 100%);
+    border-bottom: 2px solid var(--color-scarlett-red);
+  }
+
+  .price-knob {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #8A8A8A);
+    box-shadow: var(--shadow-knob);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .knob-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--color-scarlett-red);
+    opacity: 0;
+    animation: ring-pulse 3s infinite;
+  }
+
+  @keyframes ring-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.5;
+    }
+  }
+
+  .price-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, #1A1A1A, #2E2E2E);
+    border-radius: 50%;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .currency {
+    font-size: var(--font-size-base);
+    color: var(--color-scarlett-red);
+    font-weight: 700;
+  }
+
+  .amount {
+    font-size: var(--font-size-2xl);
+    color: var(--color-white);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* Service Body */
+  .service-body {
+    padding: var(--spacing-lg);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-body h3 {
+    color: var(--color-scarlett-red);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+    text-align: center;
+  }
+
+  .service-description {
+    color: var(--color-metal-silver);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  /* Quality Meter */
+  .quality-meter {
+    margin: var(--spacing-md) 0;
+  }
+
+  .meter-label {
+    display: block;
+    text-align: center;
+    font-size: var(--font-size-small);
+    color: var(--color-metal-silver);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: 2px;
+  }
+
+  .vu-meter {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .vu-bar {
+    width: 30px;
+    height: 6px;
+    background: var(--color-metal-dark);
+    border-radius: 2px;
+  }
+
+  .vu-bar.active {
+    background: var(--color-led-green);
+    box-shadow: 0 0 8px var(--color-led-green);
+    animation: vu-glow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes vu-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Service Status */
+  .service-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-xs);
+    background: rgba(0, 255, 65, 0.05);
+    border-radius: var(--border-radius);
+  }
+
+  .service-status span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* Service Footer */
+  .service-footer {
+    padding: var(--spacing-lg);
+    background: linear-gradient(180deg, #3C3C3C 0%, #2E2E2E 100%);
+    border-top: 1px solid var(--color-metal-dark);
+  }
+
+  .btn-block {
+    width: 100%;
+    display: block;
+  }
+
+  /* ============================================
+     ERROR & EMPTY STATES
+  ============================================ */
+  .error-panel, .empty-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .error-panel h3 {
+    color: var(--color-scarlett-red);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .error-hint {
+    font-size: var(--font-size-small);
+    color: var(--color-metal-silver);
+    margin-top: var(--spacing-md);
+    font-style: italic;
+  }
+
+  .empty-panel h3 {
+    color: var(--color-white);
+    margin-top: var(--spacing-md);
+  }
+
+  .knob-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .knob-value {
+    font-size: var(--font-size-3xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  /* ============================================
+     CTA SECTION
+  ============================================ */
+  .cta-section {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+  }
+
+  .cta-panel {
+    padding: var(--spacing-2xl);
+  }
+
+  .cta-content {
+    text-align: center;
+  }
+
+  .cta-content h2 {
+    margin: var(--spacing-md) 0;
+  }
+
+  .cta-content p {
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-large);
+    color: var(--color-metal-silver);
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ============================================
+     RESPONSIVE
+  ============================================ */
+  @media (max-width: 768px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .header-panel {
+      padding: var(--spacing-lg);
+    }
+
+    .knobs-row {
+      gap: var(--spacing-sm);
+    }
+
+    .price-knob {
+      width: 100px;
+      height: 100px;
+    }
+
+    .amount {
+      font-size: var(--font-size-xl);
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .cta-buttons .btn {
+      width: 100%;
+    }
+  }
+</style>
