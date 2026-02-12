@@ -1,0 +1,670 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Obtener servicios desde el backend para el selector
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+
+let services = [];
+
+try {
+  const response = await fetch(`${API_URL}/services`);
+  const data = await response.json();
+  
+  if (data.status === 'success') {
+    services = data.data;
+  }
+} catch (err) {
+  console.error('Error fetching services:', err);
+}
+
+// Obtener parámetros de URL (si vienen desde la página de servicios)
+const url = Astro.url;
+const preselectedServiceId = url.searchParams.get('serviceId');
+const preselectedServiceName = url.searchParams.get('serviceName');
+---
+
+<Layout title="Contacto - Productora Audiovisual">
+  <!-- Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="header-panel panel-scarlett">
+        <div class="knobs-row">
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+        </div>
+        <h1>RESERVA TU SESIÓN</h1>
+        <p class="header-subtitle">Completa el formulario y nos pondremos en contacto contigo</p>
+        <div class="led-group">
+          <div class="led"></div>
+          <span>SISTEMA ONLINE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulario de Reserva -->
+  <section class="section booking-section">
+    <div class="container">
+      <div class="booking-grid">
+        <!-- Panel del Formulario -->
+        <div class="form-panel panel-scarlett">
+          <div class="panel-header">
+            <h2>DATOS DE LA RESERVA</h2>
+            <div class="led-indicator">
+              <div class="led"></div>
+              <span>RECORDING</span>
+            </div>
+          </div>
+
+          <form id="bookingForm" class="booking-form">
+            <!-- Datos del Cliente -->
+            <div class="form-section">
+              <h3 class="section-title">INFORMACIÓN PERSONAL</h3>
+              
+              <div class="form-group">
+                <label for="clientName">NOMBRE COMPLETO *</label>
+                <input 
+                  type="text" 
+                  id="clientName" 
+                  name="clientName" 
+                  required
+                  placeholder="Ej: Juan Pérez"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="clientEmail">EMAIL *</label>
+                <input 
+                  type="email" 
+                  id="clientEmail" 
+                  name="clientEmail" 
+                  required
+                  placeholder="Ej: juan@email.com"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="clientPhone">TELÉFONO *</label>
+                <input 
+                  type="tel" 
+                  id="clientPhone" 
+                  name="clientPhone" 
+                  required
+                  placeholder="Ej: +598 99 123 456"
+                />
+              </div>
+            </div>
+
+            <!-- Selección de Servicio -->
+            <div class="form-section">
+              <h3 class="section-title">SELECCIONA UN SERVICIO</h3>
+              
+              <div class="form-group">
+                <label for="serviceId">SERVICIO *</label>
+                <select id="serviceId" name="serviceId" required>
+                  <option value="">-- Selecciona un servicio --</option>
+                  {services.map((service) => (
+                    <option 
+                      value={service._id}
+                      data-price={service.price}
+                      selected={service._id === preselectedServiceId}
+                    >
+                      {service.name} - ${service.price}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <!-- Display del precio seleccionado -->
+              <div class="price-display-panel" id="priceDisplay" style="display: none;">
+                <div class="price-knob">
+                  <span class="price-label">PRECIO</span>
+                  <span class="price-value" id="priceValue">$0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fecha y Hora -->
+            <div class="form-section">
+              <h3 class="section-title">FECHA Y HORA</h3>
+              
+              <div class="datetime-grid">
+                <div class="form-group">
+                  <label for="bookingDate">FECHA *</label>
+                  <input 
+                    type="date" 
+                    id="bookingDate" 
+                    name="bookingDate" 
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="bookingTime">HORA *</label>
+                  <input 
+                    type="time" 
+                    id="bookingTime" 
+                    name="bookingTime" 
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Mensaje de respuesta -->
+            <div id="responseMessage" class="response-message" style="display: none;"></div>
+
+            <!-- Botón de envío -->
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+                <span class="btn-text">CONFIRMAR RESERVA</span>
+                <span class="btn-loader" style="display: none;">⟳ PROCESANDO...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Panel de Información -->
+        <div class="info-panel panel">
+          <div class="info-header">
+            <div class="knob-large">
+              <span class="knob-value">i</span>
+            </div>
+            <h3>INFORMACIÓN IMPORTANTE</h3>
+          </div>
+
+          <div class="info-content">
+            <div class="info-item">
+              <div class="info-icon">🎯</div>
+              <div class="info-text">
+                <h4>CONFIRMACIÓN RÁPIDA</h4>
+                <p>Recibirás confirmación por email en menos de 24 horas</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">📅</div>
+              <div class="info-text">
+                <h4>RESERVA CON ANTICIPACIÓN</h4>
+                <p>Recomendamos reservar con al menos 3 días de anticipación</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">💰</div>
+              <div class="info-text">
+                <h4>PRECIOS FIJOS</h4>
+                <p>Todos nuestros servicios tienen precios transparentes y fijos</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">✅</div>
+              <div class="info-text">
+                <h4>EQUIPO PROFESIONAL</h4>
+                <p>Estudio equipado con tecnología de última generación</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contacto Alternativo -->
+          <div class="alt-contact">
+            <h4>¿PREFIERES OTRO MEDIO?</h4>
+            <div class="contact-buttons">
+              <a href="mailto:info@productora.com" class="contact-btn">
+                📧 EMAIL
+              </a>
+              <a href="https://wa.me/59899999999" class="contact-btn" target="_blank">
+                📱 WHATSAPP
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ============================================
+     PAGE HEADER
+  ============================================ */
+  .page-header {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .header-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .knobs-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .knob-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    position: relative;
+  }
+
+  .knob-small::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, #3C3C3C, #1A1A1A);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .knob-small::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 30%;
+    background: var(--color-scarlett-red);
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    box-shadow: 0 0 4px var(--color-scarlett-red);
+  }
+
+  .header-subtitle {
+    font-size: var(--font-size-large);
+    color: var(--color-metal-silver);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .led-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .led-group span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     BOOKING SECTION
+  ============================================ */
+  .booking-section {
+    background: var(--color-metal-dark);
+    min-height: 70vh;
+  }
+
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  /* Form Panel */
+  .form-panel {
+    padding: var(--spacing-xl);
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-scarlett-red);
+  }
+
+  .panel-header h2 {
+    margin: 0;
+  }
+
+  .led-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .led-indicator span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+  }
+
+  /* Form Sections */
+  .form-section {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-title {
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--color-metal-dark);
+  }
+
+  /* DateTime Grid */
+  .datetime-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  /* Price Display */
+  .price-display-panel {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(196, 30, 58, 0.05);
+    border: 2px solid var(--color-scarlett-red);
+    border-radius: var(--border-radius);
+    text-align: center;
+  }
+
+  .price-knob {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .price-label {
+    font-size: var(--font-size-small);
+    color: var(--color-metal-silver);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .price-value {
+    font-size: var(--font-size-3xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  /* Response Message */
+  .response-message {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .response-message.success {
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid var(--color-led-green);
+    color: var(--color-led-green);
+  }
+
+  .response-message.error {
+    background: rgba(196, 30, 58, 0.1);
+    border: 2px solid var(--color-scarlett-red);
+    color: var(--color-scarlett-red);
+  }
+
+  /* Form Actions */
+  .form-actions {
+    margin-top: var(--spacing-xl);
+  }
+
+  .btn-loader {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ============================================
+     INFO PANEL
+  ============================================ */
+  .info-panel {
+    padding: var(--spacing-xl);
+    height: fit-content;
+    position: sticky;
+    top: calc(var(--spacing-2xl) + 70px);
+  }
+
+  .info-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .knob-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .knob-value {
+    font-size: var(--font-size-2xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  .info-header h3 {
+    margin: 0;
+    font-size: var(--font-size-large);
+  }
+
+  /* Info Items */
+  .info-content {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .info-item {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: rgba(60, 60, 60, 0.3);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+
+  .info-item:hover {
+    background: rgba(60, 60, 60, 0.5);
+    transform: translateX(5px);
+  }
+
+  .info-icon {
+    font-size: var(--font-size-2xl);
+    flex-shrink: 0;
+  }
+
+  .info-text h4 {
+    font-size: var(--font-size-small);
+    color: var(--color-scarlett-red);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .info-text p {
+    font-size: var(--font-size-small);
+    color: var(--color-metal-silver);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Alternative Contact */
+  .alt-contact {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-metal-dark);
+  }
+
+  .alt-contact h4 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-small);
+  }
+
+  .contact-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .contact-btn {
+    display: block;
+    padding: var(--spacing-sm);
+    background: rgba(196, 30, 58, 0.1);
+    border: 1px solid var(--color-scarlett-red);
+    border-radius: var(--border-radius);
+    color: var(--color-scarlett-red);
+    font-weight: 700;
+    font-size: var(--font-size-small);
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .contact-btn:hover {
+    background: var(--color-scarlett-red);
+    color: var(--color-white);
+  }
+
+  /* ============================================
+     RESPONSIVE
+  ============================================ */
+  @media (max-width: 968px) {
+    .booking-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .info-panel {
+      position: static;
+    }
+
+    .datetime-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // ============================================
+  // FORMULARIO DE RESERVA CON JAVASCRIPT PURO
+  // ============================================
+  
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
+  
+  const form = document.getElementById('bookingForm') as HTMLFormElement;
+  const serviceSelect = document.getElementById('serviceId') as HTMLSelectElement;
+  const priceDisplay = document.getElementById('priceDisplay') as HTMLElement;
+  const priceValue = document.getElementById('priceValue') as HTMLElement;
+  const responseMessage = document.getElementById('responseMessage') as HTMLElement;
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const btnText = submitBtn.querySelector('.btn-text') as HTMLElement;
+  const btnLoader = submitBtn.querySelector('.btn-loader') as HTMLElement;
+
+  // Mostrar precio cuando se selecciona un servicio
+  serviceSelect.addEventListener('change', () => {
+    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+    const price = selectedOption.getAttribute('data-price');
+    
+    if (price) {
+      priceValue.textContent = `$${price}`;
+      priceDisplay.style.display = 'block';
+    } else {
+      priceDisplay.style.display = 'none';
+    }
+  });
+
+  // Si hay servicio preseleccionado, mostrar precio
+  if (serviceSelect.value) {
+    const event = new Event('change');
+    serviceSelect.dispatchEvent(event);
+  }
+
+  // Establecer fecha mínima (hoy)
+  const dateInput = document.getElementById('bookingDate') as HTMLInputElement;
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+
+  // Manejar envío del formulario
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Deshabilitar botón y mostrar loader
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline';
+    responseMessage.style.display = 'none';
+
+    // Obtener datos del formulario
+    const formData = new FormData(form);
+    const bookingData = {
+      clientName: formData.get('clientName') as string,
+      clientEmail: formData.get('clientEmail') as string,
+      clientPhone: formData.get('clientPhone') as string,
+      serviceId: formData.get('serviceId') as string,
+      bookingDate: formData.get('bookingDate') as string,
+      bookingTime: formData.get('bookingTime') as string,
+    };
+
+    try {
+      // Enviar al backend
+      const response = await fetch(`${API_URL}/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        // Éxito
+        responseMessage.textContent = '✅ ' + data.message;
+        responseMessage.className = 'response-message success';
+        responseMessage.style.display = 'block';
+        
+        // Resetear formulario
+        form.reset();
+        priceDisplay.style.display = 'none';
+        
+        // Scroll al mensaje
+        responseMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Error
+        responseMessage.textContent = '❌ ' + (data.message || 'Error al crear la reserva');
+        responseMessage.className = 'response-message error';
+        responseMessage.style.display = 'block';
+        
+        responseMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch (error) {
+      // Error de conexión
+      responseMessage.textContent = '❌ Error de conexión. Verifica que el servidor esté corriendo.';
+      responseMessage.className = 'response-message error';
+      responseMessage.style.display = 'block';
+      
+      console.error('Error:', error);
+    } finally {
+      // Rehabilitar botón
+      submitBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoader.style.display = 'none';
+    }
+  });
+</script>
