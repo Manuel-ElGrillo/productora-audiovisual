@@ -1,0 +1,665 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Array de alianzas hardcodeadas
+const partnerships = [
+  {
+    id: 1,
+    name: "INIT",
+    description: "Alianza estratégica con INIT para desarrollo de soluciones tecnológicas y transformación digital. Colaboramos en proyectos que integran producción audiovisual con plataformas web modernas.",
+    services: ["Desarrollo Web", "Integración de Sistemas", "Consultoría Tech"],
+    logo: null, // Por ahora sin logo
+    website: "https://init.com",
+    featured: true
+  },
+  {
+    id: 2,
+    name: "Estudio Acústico del Sur",
+    description: "Colaboración con el estudio de acústica profesional más reconocido de la región. Juntos ofrecemos soluciones integrales de insonorización y diseño acústico para proyectos audiovisuales.",
+    services: ["Diseño Acústico", "Insonorización", "Calibración de Salas"],
+    logo: null,
+    website: null,
+    featured: false
+  },
+  {
+    id: 3,
+    name: "Red de Talentos Audiovisuales",
+    description: "Red de profesionales freelance especializados en diferentes áreas: directores de fotografía, editores, coloristas, motion designers y músicos.",
+    services: ["Freelancers", "Talento Especializado", "Equipo Escalable"],
+    logo: null,
+    website: null,
+    featured: false
+  },
+  {
+    id: 4,
+    name: "Alquiler de Equipos Pro",
+    description: "Acceso preferencial a equipamiento de última generación: cámaras RED, iluminación ARRI, sistemas de audio Sennheiser y drones profesionales.",
+    services: ["Cámaras 8K", "Iluminación Pro", "Drones Certificados"],
+    logo: null,
+    website: null,
+    featured: false
+  }
+];
+
+const featuredPartnership = partnerships.find(p => p.featured);
+const otherPartnerships = partnerships.filter(p => !p.featured);
+---
+
+<Layout title="Alianzas - Productora Audiovisual">
+  <!-- Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="header-panel panel-scarlett">
+        <div class="knobs-row">
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+        </div>
+        <h1>NUESTRAS ALIANZAS</h1>
+        <p class="header-subtitle">Colaboramos con los mejores para ofrecer soluciones completas</p>
+        <div class="led-group">
+          <div class="led"></div>
+          <span>RED ACTIVA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alianza Destacada -->
+  {featuredPartnership && (
+    <section class="section featured-partnership">
+      <div class="container">
+        <div class="featured-header">
+          <h2>ALIANZA ESTRATÉGICA</h2>
+          <div class="vu-meter-horizontal">
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+          </div>
+        </div>
+
+        <div class="featured-card panel-scarlett">
+          <div class="featured-content">
+            <div class="featured-left">
+              <div class="logo-display">
+                <div class="knob-large">
+                  <span class="knob-value">{featuredPartnership.name.charAt(0)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="featured-right">
+              <div class="featured-badge">
+                <div class="led"></div>
+                <span>ALIANZA PRINCIPAL</span>
+              </div>
+              
+              <h3>{featuredPartnership.name}</h3>
+              <p class="partnership-description">{featuredPartnership.description}</p>
+              
+              <div class="services-list">
+                <h4>SERVICIOS EN COLABORACIÓN:</h4>
+                <div class="services-tags">
+                  {featuredPartnership.services.map(service => (
+                    <span class="service-tag">{service}</span>
+                  ))}
+                </div>
+              </div>
+
+              {featuredPartnership.website && (
+                <a href={featuredPartnership.website} class="btn btn-primary" target="_blank" rel="noopener">
+                  VISITAR SITIO WEB →
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Otras Alianzas -->
+  <section class="section partnerships-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>RED DE COLABORADORES</h2>
+        <p>Extendemos nuestras capacidades a través de alianzas estratégicas</p>
+      </div>
+
+      <div class="partnerships-grid">
+        {otherPartnerships.map((partner) => (
+          <div class="partnership-card panel">
+            <div class="card-header">
+              <div class="logo-mini">
+                <div class="knob-medium">
+                  <span class="initial">{partner.name.charAt(0)}</span>
+                </div>
+              </div>
+              <div class="status-indicator">
+                <div class="led"></div>
+                <span>ACTIVO</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h3>{partner.name}</h3>
+              <p class="card-description">{partner.description}</p>
+
+              <div class="services-compact">
+                <span class="services-label">SERVICIOS:</span>
+                <div class="services-pills">
+                  {partner.services.map(service => (
+                    <span class="service-pill">{service}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {partner.website && (
+              <div class="card-footer">
+                <a href={partner.website} class="link-btn" target="_blank" rel="noopener">
+                  VER MÁS →
+                </a>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section class="section benefits-section">
+    <div class="container">
+      <div class="benefits-panel panel">
+        <h2>¿POR QUÉ TRABAJAMOS CON ALIADOS?</h2>
+        
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <div class="knob-small"></div>
+            </div>
+            <h4>ESPECIALIZACIÓN</h4>
+            <p>Cada aliado aporta expertise único en su área, garantizando la más alta calidad en cada aspecto del proyecto.</p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <div class="knob-small"></div>
+            </div>
+            <h4>ESCALABILIDAD</h4>
+            <p>Adaptamos el equipo según las necesidades del proyecto, desde pequeñas producciones hasta eventos masivos.</p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <div class="knob-small"></div>
+            </div>
+            <h4>TECNOLOGÍA</h4>
+            <p>Acceso a equipamiento y software de última generación sin necesidad de grandes inversiones de capital.</p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <div class="knob-small"></div>
+            </div>
+            <h4>SOLUCIONES COMPLETAS</h4>
+            <p>Ofrecemos servicios integrales desde la conceptualización hasta la entrega final, todo bajo un mismo techo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-panel panel-scarlett">
+        <div class="knob-large">
+          <span class="knob-value">🤝</span>
+        </div>
+        <h2>¿QUIERES SER NUESTRO ALIADO?</h2>
+        <p>Si ofreces servicios complementarios y compartes nuestra visión de calidad, hablemos</p>
+        <a href="/contacto" class="btn btn-primary btn-large">PROPONER ALIANZA</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ============================================
+     PAGE HEADER
+  ============================================ */
+  .page-header {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .header-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .knobs-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .knob-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    position: relative;
+  }
+
+  .knob-small::before {
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, #3C3C3C, #1A1A1A);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .knob-small::after {
+    content: '';
+    width: 2px;
+    height: 30%;
+    background: var(--color-scarlett-red);
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    box-shadow: 0 0 4px var(--color-scarlett-red);
+  }
+
+  .header-subtitle {
+    font-size: var(--font-size-large);
+    color: var(--color-metal-silver);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .led-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .led-group span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     FEATURED PARTNERSHIP
+  ============================================ */
+  .featured-partnership {
+    background: var(--color-black);
+  }
+
+  .featured-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .featured-header h2 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .vu-meter-horizontal {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .vu-bar {
+    width: 60px;
+    height: 8px;
+    background: var(--color-metal-dark);
+    border-radius: 4px;
+  }
+
+  .vu-bar.active {
+    background: var(--color-scarlett-red);
+    box-shadow: 0 0 10px var(--color-scarlett-red);
+    animation: vu-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes vu-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .featured-card {
+    padding: var(--spacing-2xl);
+  }
+
+  .featured-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+  }
+
+  .featured-left {
+    display: flex;
+    justify-content: center;
+  }
+
+  .logo-display {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #2E2E2E 0%, #1A1A1A 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-deep);
+    border: 3px solid var(--color-scarlett-red);
+  }
+
+  .knob-large {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .knob-value {
+    font-size: var(--font-size-3xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  .featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: rgba(196, 30, 58, 0.2);
+    border: 2px solid var(--color-scarlett-red);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .featured-badge span {
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .featured-right h3 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-white);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .partnership-description {
+    color: var(--color-metal-silver);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-large);
+  }
+
+  .services-list h4 {
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-small);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .services-tags {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .service-tag {
+    background: var(--gradient-scarlett);
+    color: var(--color-white);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     PARTNERSHIPS GRID
+  ============================================ */
+  .partnerships-section {
+    background: var(--color-metal-dark);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-header h2 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-header p {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-large);
+  }
+
+  .partnerships-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .partnership-card {
+    padding: var(--spacing-lg);
+    transition: var(--transition);
+  }
+
+  .partnership-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-deep);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .knob-medium {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .initial {
+    font-size: var(--font-size-xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .status-indicator span {
+    color: var(--color-led-green);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .card-body h3 {
+    color: var(--color-white);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+  }
+
+  .card-description {
+    color: var(--color-metal-silver);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .services-compact {
+    margin-top: var(--spacing-md);
+  }
+
+  .services-label {
+    display: block;
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: 1px;
+  }
+
+  .services-pills {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+  }
+
+  .service-pill {
+    background: rgba(196, 30, 58, 0.1);
+    border: 1px solid var(--color-scarlett-red);
+    color: var(--color-scarlett-red);
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .card-footer {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-metal-dark);
+  }
+
+  .link-btn {
+    color: var(--color-scarlett-red);
+    font-weight: 700;
+    font-size: var(--font-size-small);
+    transition: var(--transition);
+  }
+
+  .link-btn:hover {
+    color: var(--color-white);
+    padding-left: 5px;
+  }
+
+  /* ============================================
+     BENEFITS SECTION
+  ============================================ */
+  .benefits-section {
+    background: var(--color-black);
+  }
+
+  .benefits-panel {
+    padding: var(--spacing-2xl);
+  }
+
+  .benefits-panel h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .benefit-item {
+    text-align: center;
+  }
+
+  .benefit-icon {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    justify-content: center;
+  }
+
+  .benefit-item h4 {
+    color: var(--color-scarlett-red);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .benefit-item p {
+    color: var(--color-metal-silver);
+    line-height: 1.6;
+  }
+
+  /* ============================================
+     CTA SECTION
+  ============================================ */
+  .cta-section {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+  }
+
+  .cta-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .cta-panel h2 {
+    margin: var(--spacing-md) 0;
+  }
+
+  .cta-panel p {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .btn-large {
+    padding: var(--spacing-md) var(--spacing-2xl);
+    font-size: var(--font-size-large);
+  }
+
+  /* ============================================
+     RESPONSIVE
+  ============================================ */
+  @media (max-width: 968px) {
+    .featured-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .partnerships-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
