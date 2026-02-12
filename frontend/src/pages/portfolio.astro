@@ -1,0 +1,694 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Array de proyectos hardcodeados
+const portfolioItems = [
+  {
+    id: 1,
+    title: "Álbum 'Noche Urbana' - Artista Indie",
+    description: "Producción completa de álbum de 10 tracks. Grabación, mezcla y mastering en nuestro estudio. Género: Alternative Rock con toques electrónicos.",
+    category: "Producción Musical",
+    imageUrl: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800",
+    client: "Banda Los Nocturnos",
+    date: "2025-11-15",
+    featured: true
+  },
+  {
+    id: 2,
+    title: "Festival de Música Electrónica 2025",
+    description: "Coordinación técnica completa del evento para 5,000 personas. Sistema de sonido profesional, iluminación sincronizada y streaming en vivo multi-cámara.",
+    category: "Evento en Vivo",
+    imageUrl: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
+    client: "Municipalidad de Montevideo",
+    date: "2025-12-20",
+    featured: true
+  },
+  {
+    id: 3,
+    title: "Campaña Digital 'Sabor Auténtico'",
+    description: "Serie de 15 videos cortos para Instagram y TikTok. Grabación 4K, edición dinámica, color grading profesional y diseño de audio envolvente.",
+    category: "Redes Sociales",
+    imageUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800",
+    client: "Restaurante El Parador",
+    date: "2026-01-10",
+    featured: false
+  },
+  {
+    id: 4,
+    title: "Jingle 'Tu Casa, Tu Hogar'",
+    description: "Jingle publicitario de 30 segundos para campaña televisiva y radio. Composición original, voces profesionales y arreglos orquestales.",
+    category: "Producción Musical",
+    imageUrl: "https://images.unsplash.com/photo-1519139270028-ed76ae3b60d4?w=800",
+    client: "Inmobiliaria Del Sur",
+    date: "2025-10-05",
+    featured: false
+  },
+  {
+    id: 5,
+    title: "Contenido Semanal Tech Reviews",
+    description: "Producción mensual de videos de reseñas tecnológicas. Guión, grabación multi-cámara, motion graphics y optimización para YouTube.",
+    category: "Redes Sociales",
+    imageUrl: "https://images.unsplash.com/photo-1551817958-20e27d7e0c9f?w=800",
+    client: "Canal TechNow UY",
+    date: "2026-01-20",
+    featured: false
+  },
+  {
+    id: 6,
+    title: "Concierto Sinfónico 'Clásicos del Tango'",
+    description: "Producción audiovisual completa de concierto en vivo. 8 cámaras 4K, mezcla en vivo de 40 canales, grabación multipista y edición final para DVD.",
+    category: "Evento en Vivo",
+    imageUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800",
+    client: "Teatro Solís",
+    date: "2025-09-18",
+    featured: true
+  }
+];
+
+// Categorías únicas para filtros
+const categories = [...new Set(portfolioItems.map(item => item.category))];
+
+// Proyectos destacados
+const featuredItems = portfolioItems.filter(item => item.featured);
+---
+
+<Layout title="Portfolio - Productora Audiovisual">
+  <!-- Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="header-panel panel-scarlett">
+        <div class="knobs-row">
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+          <div class="knob-small"></div>
+        </div>
+        <h1>NUESTRO PORTFOLIO</h1>
+        <p class="header-subtitle">Proyectos que transforman ideas en experiencias memorables</p>
+        <div class="led-group">
+          <div class="led"></div>
+          <span>{portfolioItems.length} PROYECTOS COMPLETADOS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proyectos Destacados -->
+  {featuredItems.length > 0 && (
+    <section class="section featured-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>PROYECTOS DESTACADOS</h2>
+          <div class="vu-meter-horizontal">
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+            <div class="vu-bar active"></div>
+          </div>
+        </div>
+
+        <div class="featured-grid">
+          {featuredItems.map((item) => (
+            <div class="featured-card panel-scarlett">
+              <div class="featured-image">
+                <img src={item.imageUrl} alt={item.title} />
+                <div class="featured-badge">
+                  <div class="led"></div>
+                  <span>DESTACADO</span>
+                </div>
+              </div>
+              <div class="featured-content">
+                <div class="category-badge">{item.category}</div>
+                <h3>{item.title}</h3>
+                <p class="client-name">Cliente: {item.client}</p>
+                <p class="description">{item.description}</p>
+                <div class="project-date">
+                  📅 {new Date(item.date).toLocaleDateString('es-UY', { year: 'numeric', month: 'long' })}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Filtros -->
+  <section class="section filters-section">
+    <div class="container">
+      <div class="filters-panel panel">
+        <h3>FILTRAR POR CATEGORÍA</h3>
+        <div class="filter-buttons" id="filterButtons">
+          <button class="filter-btn active" data-category="all">
+            <div class="knob-mini"></div>
+            TODOS
+          </button>
+          {categories.map((category) => (
+            <button class="filter-btn" data-category={category}>
+              <div class="knob-mini"></div>
+              {category.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid de Proyectos -->
+  <section class="section portfolio-section">
+    <div class="container">
+      <div class="portfolio-grid" id="portfolioGrid">
+        {portfolioItems.map((item) => (
+          <div class="portfolio-card panel" data-category={item.category}>
+            <div class="card-image">
+              <img src={item.imageUrl} alt={item.title} />
+              <div class="image-overlay">
+                <div class="overlay-icon">🎬</div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-header">
+                <span class="category-tag">{item.category}</span>
+                {item.featured && (
+                  <div class="featured-indicator">
+                    <div class="led"></div>
+                  </div>
+                )}
+              </div>
+              <h4>{item.title}</h4>
+              <p class="card-client">Cliente: {item.client}</p>
+              <p class="card-description">{item.description}</p>
+              <div class="card-footer">
+                <span class="card-date">
+                  {new Date(item.date).toLocaleDateString('es-UY', { year: 'numeric', month: 'short' })}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-panel panel-scarlett">
+        <div class="knob-large">
+          <span class="knob-value">+</span>
+        </div>
+        <h2>¿LISTO PARA TU PRÓXIMO PROYECTO?</h2>
+        <p>Únete a nuestros clientes satisfechos y crea algo increíble</p>
+        <a href="/contacto" class="btn btn-primary btn-large">COMENZAR AHORA</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ============================================
+     PAGE HEADER
+  ============================================ */
+  .page-header {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .header-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .knobs-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .knob-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    position: relative;
+  }
+
+  .knob-small::before {
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, #3C3C3C, #1A1A1A);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .knob-small::after {
+    content: '';
+    width: 2px;
+    height: 30%;
+    background: var(--color-scarlett-red);
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    box-shadow: 0 0 4px var(--color-scarlett-red);
+  }
+
+  .header-subtitle {
+    font-size: var(--font-size-large);
+    color: var(--color-metal-silver);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .led-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .led-group span {
+    color: var(--color-led-green);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     FEATURED SECTION
+  ============================================ */
+  .featured-section {
+    background: var(--color-black);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-header h2 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .vu-meter-horizontal {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .vu-bar {
+    width: 60px;
+    height: 8px;
+    background: var(--color-metal-dark);
+    border-radius: 4px;
+  }
+
+  .vu-bar.active {
+    background: var(--color-scarlett-red);
+    box-shadow: 0 0 10px var(--color-scarlett-red);
+    animation: vu-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes vu-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .featured-card {
+    overflow: hidden;
+  }
+
+  .featured-image {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+
+  .featured-card:hover .featured-image img {
+    transform: scale(1.05);
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: rgba(196, 30, 58, 0.95);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .featured-badge span {
+    color: var(--color-white);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .featured-content {
+    padding: var(--spacing-lg);
+  }
+
+  .category-badge {
+    display: inline-block;
+    background: var(--gradient-scarlett);
+    color: var(--color-white);
+    padding: 4px 12px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .featured-content h3 {
+    color: var(--color-white);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .client-name {
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .description {
+    color: var(--color-metal-silver);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .project-date {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     FILTERS SECTION
+  ============================================ */
+  .filters-section {
+    background: var(--color-metal-dark);
+  }
+
+  .filters-panel {
+    padding: var(--spacing-lg);
+    text-align: center;
+  }
+
+  .filters-panel h3 {
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: linear-gradient(135deg, #3C3C3C 0%, #2E2E2E 100%);
+    border: 2px solid var(--color-metal-dark);
+    color: var(--color-metal-silver);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    font-size: var(--font-size-small);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .knob-mini {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #8A8A8A);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-scarlett-red);
+    color: var(--color-white);
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: var(--gradient-scarlett);
+    border-color: var(--color-scarlett-red);
+    color: var(--color-white);
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.4);
+  }
+
+  /* ============================================
+     PORTFOLIO GRID
+  ============================================ */
+  .portfolio-section {
+    background: var(--color-metal-dark);
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .portfolio-card {
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .portfolio-card.hidden {
+    display: none;
+  }
+
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-deep);
+  }
+
+  .card-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: var(--color-black);
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+
+  .portfolio-card:hover .card-image img {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(196, 30, 58, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+  }
+
+  .portfolio-card:hover .image-overlay {
+    opacity: 1;
+  }
+
+  .overlay-icon {
+    font-size: var(--font-size-3xl);
+  }
+
+  .card-content {
+    padding: var(--spacing-lg);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .category-tag {
+    background: rgba(196, 30, 58, 0.2);
+    color: var(--color-scarlett-red);
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid var(--color-scarlett-red);
+  }
+
+  .featured-indicator {
+    animation: pulse-led 2s infinite;
+  }
+
+  @keyframes pulse-led {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .card-content h4 {
+    color: var(--color-white);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-large);
+  }
+
+  .card-client {
+    color: var(--color-scarlett-red);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .card-description {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-small);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-metal-dark);
+  }
+
+  .card-date {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     CTA SECTION
+  ============================================ */
+  .cta-section {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%);
+  }
+
+  .cta-panel {
+    text-align: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .knob-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+    box-shadow: var(--shadow-knob);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .knob-value {
+    font-size: var(--font-size-3xl);
+    color: var(--color-scarlett-red);
+    font-weight: 900;
+  }
+
+  .cta-panel h2 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .cta-panel p {
+    color: var(--color-metal-silver);
+    font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .btn-large {
+    padding: var(--spacing-md) var(--spacing-2xl);
+    font-size: var(--font-size-large);
+  }
+
+  /* ============================================
+     RESPONSIVE
+  ============================================ */
+  @media (max-width: 768px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .portfolio-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-buttons {
+      flex-direction: column;
+    }
+
+    .filter-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Sistema de filtros
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.getAttribute('data-category');
+
+      // Actualizar botones activos
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      // Filtrar cards
+      portfolioCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+
+        if (category === 'all' || cardCategory === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
