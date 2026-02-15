@@ -1,13 +1,12 @@
 import 'dotenv/config';
-import createApp from './src/05-frameworks/05-3-webservers/express-app.js';
+// import createApp from './src/frameworks/webserver/express-app.js';
+import createApp from "./src/05-frameworks/05-3-webservers/express-app.js"
 import connectDB from './src/05-frameworks/database/mongodb.js';
 
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
-
   await connectDB();
-
   const app = createApp();
 
   app.listen(PORT, () => {
