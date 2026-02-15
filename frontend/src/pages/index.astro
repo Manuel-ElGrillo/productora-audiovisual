@@ -10,9 +10,18 @@ import Layout from '../layouts/Layout.astro';
         <div class="hero-panel">
           <!-- Knobs decorativos -->
           <div class="knobs-group">
-            <div class="knob" data-label="INPUT"></div>
-            <div class="knob" data-label="GAIN"></div>
-            <div class="knob" data-label="OUTPUT"></div>
+            <div class="knob-wrapper">
+              <div class="knob" data-label="INPUT"></div>
+              <span class="knob-label">INPUT</span>
+            </div>
+            <div class="knob-wrapper">
+              <div class="knob" data-label="GAIN"></div>
+              <span class="knob-label">GAIN</span>
+            </div>
+            <div class="knob-wrapper">
+              <div class="knob" data-label="OUTPUT"></div>
+              <span class="knob-label">OUTPUT</span>
+            </div>
           </div>
 
           <h1>TRANSFORMAMOS IDEAS EN EXPERIENCIAS AUDIOVISUALES</h1>
@@ -234,62 +243,83 @@ import Layout from '../layouts/Layout.astro';
     position: relative;
   }
 
-  /* Knobs decorativos en el hero */
-  .knobs-group {
-    display: flex;
-    gap: var(--spacing-lg);
-    justify-content: center;
-    margin-bottom: var(--spacing-xl);
-  }
+/* Knobs decorativos en el hero */
+.knobs-group {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  align-items: flex-end; /* ← NUEVO: alinea por la base */
+  margin-bottom: var(--spacing-xl);
+}
 
-  .knob {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
-    box-shadow: var(--shadow-knob);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.knob {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #E8E8E8, #A0A0A0);
+  box-shadow: var(--shadow-knob);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .knob::before {
-    content: '';
-    position: absolute;
-    width: 65%;
-    height: 65%;
-    background: radial-gradient(circle, #3C3C3C, #1A1A1A);
-    border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
-  }
+.knob::before {
+  content: '';
+  position: absolute;
+  width: 65%;
+  height: 65%;
+  background: radial-gradient(circle, #3C3C3C, #1A1A1A);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
 
-  .knob::after {
-    content: '';
-    position: absolute;
-    width: 3px;
-    height: 25%;
-    background: var(--color-scarlett-red);
-    top: 12%;
-    border-radius: 2px;
-    box-shadow: 0 0 6px var(--color-scarlett-red);
-    animation: knob-rotate 4s linear infinite;
-  }
+.knob::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 28%;
+  background: var(--color-scarlett-red);
+  bottom: 50%;
+  left: 50%;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--color-scarlett-red);
+  transform-origin: bottom center;
+}
 
-  @keyframes knob-rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+/* INPUT knob - 70% (~60deg) */
+.knob[data-label="INPUT"]::after {
+  transform: rotate(60deg);
+}
 
-  .knob[data-label]::before {
-    content: attr(data-label);
-    position: absolute;
-    bottom: -25px;
-    font-size: 0.65rem;
-    color: var(--color-metal-silver);
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
+/* GAIN knob - 50% (0deg, apuntando arriba) */
+.knob[data-label="GAIN"]::after {
+  transform: rotate(0deg);
+}
+
+/* OUTPUT knob - 35% (~-45deg) */
+.knob[data-label="OUTPUT"]::after {
+  transform: rotate(-45deg);
+}
+
+/* Wrapper y etiquetas estilo Focusrite Scarlett */
+.knob-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.knob-label {
+  font-size: 0.6rem;
+  color: #B0B0B0;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  white-space: nowrap;
+}
 
   .hero h1 {
     text-align: center;
